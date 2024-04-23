@@ -6,6 +6,8 @@ import logging
 
 logger = logging.getLogger('tax_calculator')
 
+# something else this is missing is to check if the backend service is a life check
+
 
 def get_tax_brackets(tax_year):
     url = f'http://localhost:5001/tax-calculator/tax-year/{tax_year}'
@@ -37,6 +39,7 @@ def get_tax_brackets(tax_year):
     return {'errors': errors}
 
 
+# tests for this have been made in the other submission, as it is mostly copy paste, only taken the api request out along with the year
 def calculate_marginal_tax(annual_income, brackets):
 
     taxes_owed_per_band = []
