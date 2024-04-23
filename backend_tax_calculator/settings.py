@@ -59,16 +59,16 @@ LOGGING = {
         },
     },
     'handlers': {
-        'tax_calculator_file': {
+        'api_connector_file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(LOGS_DIR, 'tax_calculator.log'),
+            'filename': os.path.join(LOGS_DIR, 'APIConnector.log'),  # Update the filename here
             'formatter': 'verbose',
         },
     },
     'loggers': {
-        'tax_calculator': {
-            'handlers': ['tax_calculator_file'],
+        'TaxAPIConnector': {
+            'handlers': ['api_connector_file'],
             'level': 'INFO',
             'propagate': False,
         },

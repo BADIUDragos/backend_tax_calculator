@@ -30,7 +30,8 @@ class GetTaxBracketsTestCase(unittest.TestCase):
 
     @requests_mock.Mocker()
     def test_get_tax_brackets_not_found_error(self, m):
-        m.get(f'http://localhost:5001/tax-calculator/tax-year/{self.year}', json=self.mock_url_not_found_error, status_code=404)
+        m.get(f'http://localhost:5001/tax-calculator/tax-year/{self.year}', json=self.mock_url_not_found_error,
+              status_code=404)
         data = get_tax_brackets(self.year)
         self.assertEqual(data, self.mock_url_not_found_error)
 
