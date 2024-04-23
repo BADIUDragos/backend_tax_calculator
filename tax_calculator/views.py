@@ -6,6 +6,7 @@ from tax_calculator.serializers import TaxCalculatorSerializer
 from tax_calculator.utils import calculate_marginal_tax, get_tax_brackets
 
 
+# If I had more time I would also us IsAuthenticated to check for user authenticated by using the Auth app
 @api_view(['POST'])
 def tax_calculator(request):
     serializer = TaxCalculatorSerializer(data=request.data)
