@@ -24,8 +24,9 @@ def tax_calculator(request):
             return Response(data=e.errors, status=e.status)
 
         result = calculate_marginal_tax(serializer.validated_data['annual_income'], data['tax_brackets'])
+
         return Response(result, status=status.HTTP_200_OK)
 
-    # controlling cases of bad data sent to the endpoint look at the TaxCalculatorSerializer for data validation
+    # controlling cases of bad data sent to the endpoint, look at the TaxCalculatorSerializer for data validation
     else:
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

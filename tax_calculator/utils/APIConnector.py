@@ -17,16 +17,16 @@ class APIConnector:
         self.timeout_seconds = timeout_seconds
         self.logger = logging.getLogger('TaxAPIConnector')
 
-    def make_request(self, url, attempt=1, **kwargs):
+    def make_request(self, url, attempt=1):
         try:
-            response = requests.get(url, timeout=self.timeout_seconds, **kwargs)
+            response = requests.get(url, timeout=self.timeout_seconds)
             response.raise_for_status()
             return response.json()
 
         except ConnectionError as e:
-            if attempt < self.max_attempts:
+            if attempt <= self.max_attempts:
                 self.logger.info(f'Retrying request (attempt {attempt + 1})')
-                return self.make_request(url, attempt + 1, **kwargs)
+                return self.make_request(url, attempt + 1)
             else:
                 self.logger.error(f'Connection error on final attempt {attempt}: {str(e)}')
                 error_response = {
@@ -39,9 +39,9 @@ class APIConnector:
             errors = error_response.get('errors', [])
             self.logger.error(f'HTTP error on attempt {attempt} : {errors}')
 
-            if any(error.get('message') == 'Database not found!' for error in errors) and attempt < self.max_attempts:
+            if any(error.get('message') == 'Database not found!' for error in errors) and attempt <= self.max_attempts:
                 self.logger.info(f'Retrying request (attempt {attempt + 1})')
-                return self.make_request(url, attempt + 1, **kwargs)
+                return self.make_request(url, attempt + 1)
 
             raise ServiceException(errors, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
