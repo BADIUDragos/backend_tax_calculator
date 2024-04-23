@@ -1,3 +1,4 @@
+import json
 import time
 
 import requests
@@ -9,33 +10,39 @@ logger = logging.getLogger('tax_calculator')
 def get_tax_brackets(tax_year):
     url = f'http://localhost:5001/tax-calculator/tax-year/{tax_year}'
     retries = 5
+    timeout_seconds = 10
+    errors = None
 
     for attempt in range(retries):
         try:
-            response = requests.get(url)
+            response = requests.get(url, timeout=timeout_seconds)
             response.raise_for_status()
-            return response.json()
-        except requests.exceptions.HTTPError as http_err:
-            logger.error(f'HTTP error on attempt {attempt + 1}: {http_err}')
-        except Exception as err:
-            logger.error(f'Other error on attempt {attempt + 1}: {err}')
 
-        if attempt < retries:
+            return response.json()
+        except requests.exceptions.Timeout as e:
+            logger.error(f'Timeout occurred on attempt {attempt + 1}: {e}')
+        except requests.exceptions.HTTPError as e:
+            content = e.response.content.decode('utf-8')
+            error_data = json.loads(content)
+            errors = error_data.get('errors', [])[0]
+            error_message = errors['message']
+            logger.error(f'HTTP error on attempt {attempt + 1}: {error_message}')
+            errors = errors
+
+        if attempt < retries - 1:
             time.sleep(2)
 
-    error_message = "All attempts to fetch tax brackets have failed. Please try submitting a request again."
+    error_message = "All attempts to fetch tax brackets have failed. Please try submitting a request again." + str(errors)
     logger.error(error_message)
-    return {"error": error_message}
+    return {'errors': errors}
 
 
-def calculate_marginal_tax(annual_income, tax_year):
-
-    brackets = get_tax_brackets(tax_year)
+def calculate_marginal_tax(annual_income, tax_year, brackets):
 
     taxes_owed_per_band = []
     total_taxes = 0
 
-    for bracket in brackets['tax_brackets']:
+    for bracket in brackets:
         lower_bound = bracket['min']
         rate = bracket['rate']
         upper_bound = bracket.get('max', float('inf'))
