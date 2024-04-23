@@ -21,8 +21,7 @@ def tax_calculator(request):
             return Response({'errors': dict_data['errors']}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         result = calculate_marginal_tax(
-            serializer.validated_data['annual_income'],
-            tax_year, dict_data['tax_brackets'])
+            serializer.validated_data['annual_income'], dict_data['tax_brackets'])
         return Response(result, status=status.HTTP_200_OK)
     else:
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

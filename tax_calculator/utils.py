@@ -37,7 +37,7 @@ def get_tax_brackets(tax_year):
     return {'errors': errors}
 
 
-def calculate_marginal_tax(annual_income, tax_year, brackets):
+def calculate_marginal_tax(annual_income, brackets):
 
     taxes_owed_per_band = []
     total_taxes = 0
