@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-zxt-t3%)uo=69r1zs2t%uw$^p+ba8g8^x3o(frc2wwh1m(_285
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -45,8 +45,6 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'rest_framework_simplejwt',
-
-
 ]
 
 LOGGING = {
@@ -126,22 +124,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'backend_tax_calculator.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'db',
-        'USER': 'postgres',
-        'PASSWORD': 'Maudeg12.34',
-        'HOST': 'localhost',
-        'PORT': 5432,
-    }
-}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
